@@ -1,0 +1,567 @@
+<%+header%>
+
+
+<%
+
+local brxyutil =require "luci.tools.brxyutil"
+local data = brxyutil.getData()
+
+%>
+<form id="aioConfigForm">
+
+	<div class="cbi-map" id="cbi-unitmachine">
+		<h2><a id="content" name="content"><%:aio config%></a></h2>
+		<div class="cbi-map-descr"><%:aio config detail%>			
+		</div>
+
+		<br>
+
+		<fieldset>
+			<legend>
+				<%:device registration%>
+			</legend>
+			<table>
+				<tr>
+					<th>IP</th>
+					<td><span id="deviceIP"><%=data.deviceIp%></span></td>
+					<th><%:device name%></th>
+					<td>
+					<input type="text" id="deviceName" name="deviceName" placeholder="<%:device name placeholder%>" value="<%=data.deviceName%>">
+					</td>
+				</tr>
+				<tr>
+					<th><%:device serial number%></th>
+					<td><span id="deviceMAC"><%=data.deviceMac%></span></td>
+					<th><%:Device activation code%></th>
+					<td>
+					<input type="text" id="deviceActiveCode" name="deviceActiveCode" placeholder="<%:Device activation code placeholder%>" value="<%=data.activeCode%>">
+					</td>
+				</tr>
+			</table>
+		</fieldset>
+
+		<fieldset>
+			<legend>
+				<%:RS232 config%>
+			</legend>
+			<table>
+				<tr>
+					<th><%:baudRate%></th>
+					<td>
+					<select id="baudRate">
+						<option value="300">300</option>
+						<option value="600">600</option>
+						<option value="1200">1200</option>
+						<option value="2400">2400</option>
+						<option value="4800">4800</option>
+						<option value="9600">9600</option>
+						<option value="14400">14400</option>
+						<option value="19200">19200</option>
+						<option value="38400">38400</option>
+						<option value="57600">57600</option>
+						<option value="115200">115200</option>
+					</select></td>
+					<th><%:checkSum%></th>
+					<td>
+					<select id="checkSum">
+						<option value="NONE"><%:checkSum NONE%></option>
+						<option value="ODD"><%:Odd parity%></option>
+						<option value="EVEN"><%:Even parity%></option>
+					</select></td>
+				</tr>
+				<tr>
+					<th><%:Data bits%></th>
+					<td>
+					<select id="dataBits">
+						<option value="8"><%:The 8 bit data%></option>
+						<option value="9"><%:The 9 bit data%></option>
+					</select></td>
+					<th><%:Stop bit%></th>
+					<td>
+					<select id="stopBits">
+						<option value="1"><%:0.5 stop bit%></option>
+						<option value="2"><%:1 stop bit%></option>
+						<option value="3"><%:1.5 stop bit%></option>
+						<option value="4"><%:2 stop bit%></option>
+					</select></td>
+				</tr>
+				<tr>
+					<th><%:Projector boot code%></th>
+					<td>
+					<input type="text" id="projectionOn" name="projectionOn" placeholder="<%:16 hexadecimal code placeholder%>">
+					</td>
+					<td><%:projectionOnFlag%>
+					<input type="checkbox" id="projectionOnFlag">
+					</td>
+					<td>
+					<input type="button" id="projectionOnTest" value="<%:test button%>" class="cbi-button">
+					</td>
+				</tr>
+				<tr>
+					<th><%:projectionOff%></th>
+					<td>
+					<input type="text" id="projectionOff" name="projectionOff" placeholder="<%:16 hexadecimal code placeholder%>">
+					</td>
+					<td><%:projectionOffFlag%>
+					<input type="checkbox" id="projectionOffFlag">
+					</td>
+					<td>
+					<input type="button" id="projectionOffTest" value="<%:test button%>" class="cbi-button">
+					</td>
+				</tr>
+				<tr>
+					<th><%:projectionChannel%></th>
+					<td>
+					<input type="text" id="projectionChannel" name="projectionChannel" placeholder="<%:16 hexadecimal code placeholder%>">
+					</td>
+					<td><%:projectionChannelFlag%>
+					<input type="checkbox" id="projectionChannelFlag">
+					</td>
+					<td>
+					<input type="button" id="projectionChannelTest" value="<%:test button%>" class="cbi-button">
+					</td>
+				</tr>
+
+				<tr>
+					<th><%:projectorOpenDelay%></th>
+					<td>
+					<select id="projectorOpenDelay">
+						<option value="0">0</option>
+						<option value="1">0.5</option>
+						<option value="2">1</option>
+						<option value="3">1.5</option>
+						<option value="4">2</option>
+						<option value="5">2.5</option>
+						<option value="6">3</option>
+						<option value="7">3.5</option>
+						<option value="8">4</option>
+						<option value="9">4.5</option>
+						<option value="10">5</option>
+					</select></td>
+
+					<th><%:projectorCoolingDelay%></th>
+					<td>
+					<select id="projectorCoolingDelay">
+						<option value="0">0</option>
+						<option value="1">0.5</option>
+						<option value="2">1</option>
+						<option value="3">1.5</option>
+						<option value="4">2</option>
+						<option value="5">2.5</option>
+						<option value="6">3</option>
+						<option value="7">3.5</option>
+						<option value="8">4</option>
+						<option value="9">4.5</option>
+						<option value="10">5</option>
+						<option value="11">5.5</option>
+						<option value="12">6</option>
+						<option value="13">6.5</option>
+						<option value="14">7</option>
+						<option value="15">7.5</option>
+						<option value="16">8</option>
+						<option value="17">8.5</option>
+						<option value="18">9</option>
+						<option value="19">9.5</option>
+						<option value="20">10</option>
+					</select></td>
+				</tr>
+				<tr>
+					<th><%:Query projector lamp life%></th>
+					<td>
+					<input type="checkbox" id="haveProjector" checked>
+					</td>
+					<th><%:The service life of the bulb query code%></th>
+					<td>
+					<input type="text" id="lampUsed" name="lampUsed" placeholder="<%:16 hexadecimal code placeholder%>">
+					</td>
+				</tr>
+
+			</table>
+		</fieldset>
+
+		<fieldset>
+			<legend>
+				<%:The built-in computer settings%>
+			</legend>
+			<table>
+				<tr>
+					<th><%:Automatic startup%></th>
+					<td>
+					<input type="checkbox" id="isAutoStartUp">
+					</td>
+					<td>&nbsp;</td><td>&nbsp;</td>
+				</tr>
+			</table>
+		</fieldset>
+		<fieldset>
+			<legend>
+				<%:Sound setting%>
+			</legend>
+			<table>
+				<tr>
+					<th><%:volumeTotal%></th>
+					<td>
+					<select id="volumeTotal">
+						<option value="1">1</option>
+						<option value="2">2</option>
+						<option value="3">3</option>
+						<option value="4">4</option>
+						<option value="5">5</option>
+						<option value="6">6</option>
+						<option value="7">7</option>
+						<option value="8">8</option>
+					</select></td>
+					<th><%:volumeHight%></th>
+					<td>
+					<select id="volumeHigh">
+						<option value="1">1</option>
+						<option value="2">2</option>
+						<option value="3">3</option>
+						<option value="4">4</option>
+						<option value="5">5</option>
+						<option value="6">6</option>
+						<option value="7">7</option>
+						<option value="8">8</option>
+						<option value="9">9</option>
+						<option value="10">10</option>
+						<option value="11">11</option>
+						<option value="12">12</option>
+						<option value="13">13</option>
+						<option value="14">14</option>
+						<option value="15">15</option>
+					</select></td>
+					<th><%:volumeLow%></th>
+					<td>
+					<select id="volumeLow">
+						<option value="1">1</option>
+						<option value="2">2</option>
+						<option value="3">3</option>
+						<option value="4">4</option>
+						<option value="5">5</option>
+						<option value="6">6</option>
+						<option value="7">7</option>
+						<option value="8">8</option>
+						<option value="9">9</option>
+						<option value="10">10</option>
+						<option value="11">11</option>
+						<option value="12">12</option>
+						<option value="13">13</option>
+						<option value="14">14</option>
+						<option value="15">15</option>
+					</select></td>
+
+				</tr>
+				
+			</table>
+		</fieldset>
+		
+		<table>
+			<tr>
+				<td><span id="errorInfo"> </span></td>
+			</tr>
+		</table>
+	</div>
+
+
+	<div class="cbi-page-actions">
+
+		<input class="cbi-button cbi-button-save" value="<%:Save & Apply%>" type="button" id="saveBtn">
+
+		<input class="cbi-button cbi-button-reset" value="<%:Refresh%>" type="button" id="resetBtn">
+
+	</div>
+</form>
+	<script type="text/javascript" src="<%=resource%>/jquery-1.11.1.min.js"></script>
+	<script type="text/javascript" src="<%=resource%>/jquery.validate.min.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			addDeviceFormValidate();
+
+			$("#saveBtn").click(function() {
+				if($("#aioConfigForm").valid()){
+					saveConfig();				
+				}
+			});
+			
+			$("#resetBtn").click(function(){
+				window.location.reload(true);
+			});
+			
+			$("#projectionOnTest").click(function(){
+				projectionOnTest();
+			});
+			
+			$("#projectionOffTest").click(function(){
+				projectionOffTest();
+			});
+			
+			$("#projectionChannelTest").click(function(){
+				projectionChannelTest();
+			});
+			
+			dataInit();
+
+		});
+		
+		function dataInit(){
+		
+			$("#baudRate").val("<%=data.baudRate%>");
+			$("#checkSum").val("<%=data.checkSum%>");
+			$("#dataBits").val("<%=data.dataBits%>");
+			$("#stopBits").val("<%=data.stopBits%>");
+			$("#projectionOn").val("<%=data.projectorOn%>");
+			if("<%=data.projectorOnFlag%>"=="0"){
+				$("#projectionOnFlag").attr("checked",false);
+			}else{
+				$("#projectionOnFlag").attr("checked",true);
+			}
+			$("#projectionOff").val("<%=data.projectorOff%>");
+			if("<%=data.projectorOffFlag%>"=="0"){
+				$("#projectionOffFlag").attr("checked",false);
+			}else{
+				$("#projectionOffFlag").attr("checked",true);
+			}
+			$("#projectionChannel").val("<%=data.projectorChannel%>");
+			if("<%=data.projectorChannelFlag%>"=="0"){
+				$("#projectionChannelFlag").attr("checked",false);
+			}else{
+				$("#projectionChannelFlag").attr("checked",true);
+			}
+			
+			if("<%=data.lampUsedFlag%>"=="0"){
+				$("#haveProjector").attr("checked",false);
+			}else{
+				$("#haveProjector").attr("checked",true);
+			}
+			$("#lampUsed").val("<%=data.lampUsed%>");
+			$("#projectorOpenDelay").val("<%=data.projectorOpenDelay%>");
+			$("#projectorCoolingDelay").val("<%=data.projectorCoolingDelay%>");
+			if("<%=data.isAutoStartUp%>"=="0"){
+				$("#isAutoStartUp").attr("checked",false);
+			}else{
+				$("#isAutoStartUp").attr("checked",true);
+			}
+			$("#volumeTotal").val("<%=data.volumeTotal%>");
+			$("#volumeHigh").val("<%=data.volumeHigh%>");
+			$("#volumeLow").val("<%=data.volumeLow%>");
+		}
+		
+		
+		function projectionOnTest(){
+			var projectionOn = $("#projectionOn").val();
+			alert("调用c库，测试开机码是否正确"+projectionOn);
+			$("#projectionOnFlag").attr("checked",true);
+		}
+		
+		function projectionOffTest(){
+			var projectionOff = $("#projectionOff").val();
+			alert("调用c库，测试关机码是否正确"+projectionOff);
+			$("#projectionOffFlag").attr("checked",true);
+		}
+		
+		function projectionChannelTest(){
+			var projectionChannel = $("#projectionChannel").val();
+			alert("调用c库，测试显示通道是否正确"+projectionChannel);
+			$("#projectionChannelFlag").attr("checked",true);
+		}
+		
+
+		function saveConfig() {
+			var data = validateData();
+			$.ajax({
+				type:"post",
+				dataType:"json",
+				url:"/cgi-bin/luci/rpc/brxy",
+				data:'{"jsonrpc": "2.0", "method": "aioConfig", "params": ["'+data.deviceName+'","'
+				+data.deviceActiveCode+'","'
+				+data.baudRate+'","'
+				+data.checkSum+'","'
+				+data.dataBits+'","'
+				+data.stopBits+'","'
+				+data.projectionOn+'","'
+				+data.projectionOnFlag+'","'
+				+data.projectionOff+'","'
+				+data.projectionOffFlag+'","'
+				+data.projectionChannel+'","'
+				+data.projectionChannelFlag+'","'
+				+data.lampUsedFlag+'","'
+				+data.lampUsed+'","'
+				+data.projectorOpenDelay+'","'
+				+data.projectorCoolingDelay+'","'
+				+data.isAutoStartUp+'","'
+				+data.volumeTotal+'","'
+				+data.volumeHigh+'","'
+				+data.volumeLow+'"],"id": 12}',
+				error:function(xhr, status, e) {
+					ajaxErrorDeal(xhr, status, e);
+				},
+				success:function(result){
+					//alert("TODO 保存到数据库"+result.result);
+					if(result.result.re){
+						alert("保存成功");
+						window.location.relaod(true);
+					}
+				}
+			});
+			
+			
+
+		}
+		
+
+		function validateData() {
+			var flag = true;
+			var msg = "";
+			//TODO 数据验证
+			deviceIP = $("#deviceIP").html();
+			deviceMAC = $("#deviceMAC").html();
+			
+			deviceName = $("#deviceName").val();
+			deviceActiveCode = $("#deviceActiveCode").val();
+			baudRate = $("#baudRate").val();
+			checkSum = $("#checkSum").val();
+			dataBits = $("#dataBits").val();
+			stopBits = $("#stopBits").val();
+			projectionOn = $("#projectionOn").val();
+			if($("#projectionOnFlag").is(":checked")){
+				projectionOnFlag = 1;
+			}else{
+				projectionOnFlag = 0;
+			}
+			projectionOff = $("#projectionOff").val();
+			if($("#projectionOffFlag").is(":checked")){
+				projectionOffFlag = 1;
+			}else{
+				projectionOffFlag = 0;
+			}
+			projectionChannel = $("#projectionChannel").val();
+			if($("#projectionChannelFlag").is(":checked")){
+				projectionChannelFlag = 1;
+			}else{
+				projectionChannelFlag = 0;
+			}
+			lampUsed = $("#lampUsed").val();
+			if($("#haveProjector").is(":checked")){
+				lampUsedFlag = 1;
+			}else{
+				lampUsedFlag = 0;
+			}
+			projectorOpenDelay = $("#projectorOpenDelay").val();
+			projectorCoolingDelay = $("#projectorCoolingDelay").val();
+			if($("#isAutoStartUp").is(":checked")){
+				isAutoStartUp = 1;
+			}else{
+				isAutoStartUp = 0;
+			}
+			volumeTotal = $("#volumeTotal").val();
+			volumeHigh = $("#volumeHigh").val();
+			volumeLow = $("#volumeLow").val();
+
+			return {
+				deviceIP : deviceIP,
+				deviceName : deviceName,
+				deviceMAC : deviceMAC,
+				deviceActiveCode : deviceActiveCode,
+				baudRate : baudRate,
+				checkSum : checkSum,
+				dataBits : dataBits,
+				stopBits : stopBits,
+				projectionOn : projectionOn,
+				projectionOnFlag : projectionOnFlag,
+				projectionOff : projectionOff,
+				projectionOffFlag : projectionOffFlag,
+				projectionChannel : projectionChannel,
+				projectionChannelFlag : projectionChannelFlag,
+				lampUsedFlag:lampUsedFlag,
+				lampUsed : lampUsed,
+				projectorOpenDelay : projectorOpenDelay,
+				projectorCoolingDelay : projectorCoolingDelay,
+				isAutoStartUp : isAutoStartUp,
+				volumeTotal : volumeTotal,
+				volumeHigh : volumeHigh,
+				volumeLow : volumeLow
+			};
+		}
+		
+		function ajaxErrorDeal(xhr, status, e){
+			console.error('JqueryAjax error invoke! status:' + status + e+" " +xhr.status);
+			//alert(status+" "+e+" "+xhr.status);
+			if(xhr.status==403){
+				console.error("ajax 403 error request forbidden , re login");
+				var mainUrl = "<%=luci.dispatcher.build_url()%>";
+				var urls = mainUrl.split(";");
+				var url = urls[0];
+				window.location.href =url ;
+			}
+		}
+		
+		var addValidator;
+function addDeviceFormValidate() {
+    addValidator = $("#aioConfigForm").validate({
+        rules : {
+            deviceName : {
+                required : true                
+            },
+            deviceActiveCode:{
+            	required:true
+            },
+            projectionOn : {
+            	required:true,
+            	hexadecimal:true
+            },
+            projectionOff : {
+            	required:true,
+            	hexadecimal:true
+            },
+            projectionChannel : {
+            	required:true,
+            	hexadecimal:true
+            },
+            lampUsed : {
+            	required:false,
+            	hexadecimal:true
+            }
+        },
+        messages : {
+            deviceName : {
+                required : "必须输入  "                
+            },
+            deviceActiveCode:{
+            	required:"必须输入  "
+            }, 
+            projectionOn : {
+            	required:"必须输入  ",
+            	hexadecimal:"开机码格式不正确  "   
+            },
+            projectionOff : {
+            	required:"必须输入  ",
+            	hexadecimal:"关机码格式不正确  "   
+            },
+            projectionChannel : {
+            	required:"必须输入  ",
+            	hexadecimal:"显示通道格式不正确  "   
+            },
+            lampUsed : {
+            	required:"必须输入  ",
+            	hexadecimal:"灯泡寿命查询码格式不正确  "   
+            }
+
+        },
+        errorClass:"cbi-input-invalid",
+        errorLabelContainer:$("#errorInfo")
+       
+    });
+    
+    
+
+}
+
+/**16进制代码*/
+jQuery.validator.addMethod("hexadecimal", function(value, element) {
+	return this.optional(element) || /^[0-9a-fA-F]{2}([,][0-9a-fA-F]{2})*$/.test(value);
+}, "请输入正确的16进制代码，每两位逗号隔开");
+
+	</script>
+
+
+<%+footer%>

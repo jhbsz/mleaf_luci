@@ -1,0 +1,151 @@
+
+
+<%+header%>
+
+
+<form method="post" action="<%=pcdata(luci.http.getenv("REQUEST_URI"))%>">
+	<div class="cbi-map">
+		<h2><a id="content" name="content"><%:Authorization Required%></a></h2>
+		<div class="cbi-map-descr">
+			<%:Please enter your username and password.%>
+			<%- if fuser then %>
+			<div class="error"><%:Invalid username and/or password! Please try again.%></div>
+			<br />
+			<% end -%>
+		</div>
+		<fieldset class="cbi-section">
+		<legend>边框测试</legend>
+			<div class="cbi-value">
+				<label class="cbi-value-title"><%:Username%></label>
+				<div class="cbi-value-field">
+					<input class="cbi-input-user" type="text" name="username" value="<%=duser%>" />
+				</div>
+			</div>
+			<div class="cbi-value cbi-value-last">
+				<label class="cbi-value-title"><%:Password%></label>
+				<div class="cbi-value-field">
+					<input id="focus_password" class="cbi-input-password" type="password" name="password" />
+				</div>
+			</div>
+		<fieldset class="cbi-section-node">
+		
+		</fieldset>
+			<legend>边框测试</legend>
+			<div class="cbi-value">
+				<label class="cbi-value-title">use</label>
+				<div class="cbi-value-field">
+					<input class="cbi-input-user" type="text" name="testField" id="testField" value="123" />
+				</div>
+			</div>
+			<div class="cbi-value">
+				<label class="cbi-value-title">submitted</label>
+				<div class="cbi-value-field">
+					<input class="cbi-input-user" type="text" name="testField2" value="<%=testField%>" />
+				</div>
+			</div>
+		</fieldset>
+	</div>
+	<div>
+		<input type="button" id="submit" value="<%:Login%>" class="cbi-button cbi-button-apply" />
+		<input type="reset" value="<%:Reset%>" class="cbi-button cbi-button-reset" />
+	</div>
+</form>
+
+
+<script type="text/javascript" src="<%=resource%>/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="<%=resource%>/jquery.cookie.js"></script>
+<script type="text/javascript">
+
+	$(document).ready(function(){
+		$("#submit").click(function(){
+			
+			alert($("#testField").val());
+			
+		});
+		test();
+		//jsonRpcLogin();
+	});
+
+
+
+var auth;
+function jsonRpcLogin(){
+	$.ajax({
+		type:"post",
+		dataType:"json",
+		url:"/cgi-bin/luci/rpc/auth",
+		data:' {"jsonrpc": "2.0","method": "login", "params": ["root","123"],"id": 1}',
+		success:function(result){
+			auth = result.result;
+			//alert(auth);
+			//SetCookie("auth",auth);
+			//reboot();
+			//dir();
+			getUser();
+		
+		}
+	});
+}
+
+function test(){
+	$.ajax({
+		type:"post",
+		dataType:"json",
+		url:"/cgi-bin/luci/rpc/test",
+		data:'{"jsonrpc": "2.0", "method": "test", "params": [],"id": 4}',
+		success:function(result){
+			alert("rpc no auth method test result="+result.result);
+			//jsonRpcLogin();
+			getUser();
+		}
+	});
+}
+
+function dir(){
+	$.ajax({
+		type:"post",
+		dataType:"json",
+		url:"/cgi-bin/luci/rpc/fs?auth="+auth,
+		data:'{"jsonrpc": "2.0", "method": "dir", "params": ["/"],"id": 3}',
+		success:function(result){
+			alert(result.result);
+		
+		}
+	});
+
+}
+
+function reboot(){
+	$.ajax({
+		type:"post",
+		dataType:"json",
+		url:"/cgi-bin/luci/rpc/sys?auth="+auth,
+		data:'{"jsonrpc": "2.0", "method": "reboot", "params": [],"id": 2}',
+		success:function(result){
+			alert(result.result);
+		
+		}
+	});
+}
+
+function getUser(){
+	$.ajax({
+		type:"post",
+		dataType:"json",
+		url:"/cgi-bin/luci/rpc/sys?auth="+$.cookie("auth"),
+		data:'{"jsonrpc": "2.0", "method": "user.getuser", "params": ["root"],"id": 12}',
+		success:function(result){
+			alert(result.result);
+		
+		}
+	});
+}
+
+
+
+</script>
+
+
+
+
+<%+footer%>

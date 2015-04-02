@@ -1,0 +1,8 @@
+msgid ""
+msgstr "Content-Type: text/plain; charset=UTF-8"
+
+msgid "use time list"
+msgstr ""
+
+msgid "use time list detail"
+msgstr ""

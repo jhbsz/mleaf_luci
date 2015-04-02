@@ -1,0 +1,232 @@
+<%+header%>
+
+<%
+local nixio = require "nixio"
+local brxyutil =require "luci.tools.brxyutil"
+local table = require "table"
+local data = brxyutil.geInternetOfThingsFromDB()
+
+--[[
+local max = table.maxn(data)
+nixio.syslog("debug","for k,row in ipairs(data) do"..data[1]["Device_ID"].." max="..max)
+
+local html = ""
+table.foreach(data,function(i,row)
+nixio.syslog("debug","table.foreach i="..i.." Device_ID="..row["Device_ID"].." Device_Type="..row["Device_Type"].." Device_Status="..row["Device_Status"])
+html=html.."<tr><td><input type='hidden' value='"..row["number"].."' name='number'>	"..row["Device_Type"].."</td><td>"..row["Device_ID"].."</td><td>"..row["Device_Status"].."</td><td>&nbsp;</td></tr>"
+end)
+nixio.syslog("debug",html)
+]]--
+%>
+<form id="internetOfThingsConfigForm">
+
+	<div class="cbi-map" id="cbi-unitmachine">
+		<h2><a id="content" name="content">物联网配置页面</a></h2>
+		<div class="cbi-map-descr">
+			物联网设备的增加和删除
+		</div>
+
+		<br>
+
+		<fieldset>
+
+			<table class="cbi-section-table">
+
+				<tr>
+					<td>设备类型</td>
+					<td>设备ID</td>
+					<td>设备状态</td>
+					<td>设备名称</td>
+					<td>&nbsp; </td>
+				</tr>
+				<tbody id="iotBody">
+					&nbsp;
+				</tbody>
+
+				<tr id="addTr" style="display:none;">
+					<td>
+					<select id="deviceType">
+						<option value="Light Control One"><%:Light Control One%></option>
+						<option value="Light Control Two"><%:Light Control Two%></option>
+						<option value="Light Control Three"><%:Light Control Three%></option>
+						<option value="Light Control Four"><%:Light Control Four%></option>
+						<option value="Temperature humidity Light"><%:Temperature humidity Light%></option>
+						<option value="RFID">RFID</option>
+					</select></td>
+					<td>
+					<input  class="cbi-input-text" id="deviceID" name="deviceID"  type="text">
+					</td>
+					<td>
+					<select id="deviceStatus">
+						<option value="OFF">OFF</option>
+						<option value="ON">ON</option>
+					</select></td>
+					<td>
+					<input  class="cbi-input-text" id="deviceName" name="deviceName"  type="text">
+					</td><td> &nbsp;</td>
+				</tr>
+				<tr>
+					<td colspan="5" >
+					<input type="button" class="cbi-button cbi-button-add" value="<%:Add%>" id="IOTAddBtn">
+					</td>
+				</tr>
+
+			</table>
+		</fieldset>
+
+	</div>
+
+	<table>
+		<tr>
+			<td><span id="errorInfo"> </span></td>
+		</tr>
+	</table>
+
+	<div class="cbi-page-actions">
+
+		<input class="cbi-button cbi-button-save" value="<%:Save & Apply%>" type="button" id="saveBtn">
+
+		<input class="cbi-button cbi-button-reset" value="<%:Refresh%>" type="button" id="resetBtn">
+
+	</div>
+
+</form>
+<script type="text/javascript" src="<%=resource%>/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="<%=resource%>/jquery.validate.min.js"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+
+		geInternetOfThingsFromDB();
+
+		addIOTValidate();
+		$(document).on("click", "#internetOfThingsConfigForm input[type='button'][name='deleteIOT']", function() {
+			var number = $(this).attr("id");
+			deleteIOT(number);
+		});
+
+		$("#IOTAddBtn").click(function() {
+			$("#addTr").show();
+			$(this).hide();
+		});
+
+		$("#saveBtn").click(function() {
+			if ($("#internetOfThingsConfigForm").valid()) {
+				saveIOT();
+			}
+		});
+
+		$("#resetBtn").click(function() {
+			window.location.reload(true);
+		});
+
+	});
+
+	function deleteIOT(number) {
+		$.ajax({
+			type : "post",
+			dataType : "json",
+			url : "/cgi-bin/luci/rpc/brxy",
+			data : '{"jsonrpc": "2.0", "method": "deleteIOT", "params": ["' + number + '"],"id": 15}',
+			error:function(xhr, status, e) {
+				ajaxErrorDeal(xhr, status, e);
+			},
+			success : function(result) {
+				window.location.reload(true);
+			}
+		});
+	}
+
+	function saveIOT() {
+		$.ajax({
+			type : "post",
+			dataType : "json",
+			url : "/cgi-bin/luci/rpc/brxy",
+			data : '{"jsonrpc": "2.0", "method": "saveIOT", "params": ["' + $("#deviceType").val() + '","' + $("#deviceID").val() + '","' + $("#deviceStatus").val() + '","' + $("#deviceName").val() + '"],"id": 15}',
+			error:function(xhr, status, e) {
+				ajaxErrorDeal(xhr, status, e);
+			},
+			success : function(result) {
+				window.location.reload(true);
+			}
+		});
+	}
+
+	function dataInit(data) {
+		console.info("dataInit 初始化数据到页面");
+		var html = "";
+		for (var i in data) {
+			var iot = data[i];
+			html += "<tr><td>" + iot.Device_Type + "</td><td>" + iot.Device_ID + "</td><td>" + iot.Device_Status + "</td><td>" + "</td><td><input type='button' name='deleteIOT' id=" + iot.number + " value='<%:Delete%>' class='cbi-button cbi-button-remove'></td></tr>";
+		}
+		$("#iotBody").html(html);
+	}
+
+	function geInternetOfThingsFromDB() {
+		console.info("geInternetOfThingsFromDB()");
+		$.ajax({
+			type : "post",
+			dataType : "json",
+			url : "/cgi-bin/luci/rpc/brxy",
+			data : '{"jsonrpc": "2.0", "method": "geInternetOfThingsFromDB", "params": [],"id": 15}',
+			error:function(xhr, status, e) {
+				console.error('JqueryAjax error invoke! status:' + status + e+" " +xhr.status);
+				ajaxErrorDeal(xhr, status, e);
+			},
+			success : function(result) {
+				if (result.result != "" || result.result != null) {
+				}
+				dataInit(result.result);
+			}
+		});
+	}
+	
+	function ajaxErrorDeal(xhr, status, e){
+		
+				//alert(status+" "+e+" "+xhr.status);
+				if(xhr.status==403){
+					console.error("ajax 403 error request forbidden , re login");
+					var mainUrl = "<%=luci.dispatcher.build_url()%>";
+					var urls = mainUrl.split(";");
+					var url = urls[0];
+					window.location.href =url ;
+				}
+	}
+	
+
+
+	var addValidator;
+	function addIOTValidate() {
+		addValidator = $("#internetOfThingsConfigForm").validate({
+			rules : {
+				deviceName : {
+					required : true
+				},
+				deviceID : {
+					required : true,
+					macaddr : true
+				}
+			},
+			messages : {
+				deviceName : {
+					required : "设备名称必须输入  "
+				},
+				deviceID : {
+					required : "设备ID必须输入  ",
+					macaddr : "mac地址不正确"
+				}
+			},
+			errorClass : "cbi-input-invalid",
+			errorLabelContainer : $("#errorInfo")
+
+		});
+
+	}
+
+	/**mac地址*/
+	jQuery.validator.addMethod("macaddr", function(value, element) {
+		return this.optional(element) || /^([0-9a-fA-F]{2})(([/\s:-][0-9a-fA-F]{2}){5})$/.test(value);
+	}, "请输入正确的mac地址");
+
+</script>
+
+<%+footer%>

@@ -1,0 +1,73 @@
+
+config Enable_Disable_Time
+	option number '1'
+	option Status 'ENABLE'
+	option Start_Time '9:00'
+	option End_Time '13:00'
+	option Repeat 'EVERYWORKDAY'
+
+config Enable_Disable_Time
+	option number '2'
+	option Status 'ENABLE'
+	option Start_Time '14:00'
+	option End_Time '19:00'
+	option Repeat 'EVERYDAY'
+
+config Enable_Disable_Time
+	option number '3'
+	option Status 'ENABLE'
+	option Start_Time '14:00'
+	option End_Time '19:00'
+	option Repeat 'EVERYDAY'
+
+config Enable_Disable_Time
+	option number '4'
+	option Status 'DISABLE'
+	option Start_Time '22:00'
+	option End_Time '7:00'
+	option Repeat 'EVERYDAY'
+
+config Internet_Of_Things
+	option number '1'
+	option Device_Type 'Light Control One'
+	option Device_ID '00:01:01:01:01:01'
+	option Device_Name '三年级二班'
+	option Device_Status 'ON'
+
+config Internet_Of_Things
+	option number '2'
+	option Device_Type 'Light Control Two'
+	option Device_ID '00:01:01:01:01:01'
+	option Device_Name '三年级二班'
+	option Device_Status 'ON'
+
+config Internet_Of_Things
+	option number '4'
+	option Device_Status 'OFF'
+	option Device_ID '00:01:01:01:01:01'
+	option Device_Name '三年级二班'
+	option Device_Type 'Light Control Three'
+
+config Internet_Of_Things
+	option number '5'
+	option Device_Status 'OFF'
+	option Device_ID '00:01:01:01:01:01'
+	option Device_Name '三年级二班'
+	option Device_Type 'Light Control Four'
+
+config Internet_Of_Things
+	option Device_ID '00:01:01:01:01:06'
+	option Device_Name '三年级二班'
+	option Device_Type 'Temperature humidity Light'
+	option Device_Status 'ON'
+
+config Internet_Of_Things
+	option Device_ID '00:01:01:01:01:06'
+	option Device_Status 'OFF'
+	option Device_Name '三年级二班'
+	option Device_Type 'RFID'
+
+config Internet_Of_Things
+	option Device_Type 'Light Control Three'
+	option Device_Status 'ON'
+
